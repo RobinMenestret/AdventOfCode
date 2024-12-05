@@ -1381,7 +1381,7 @@ def parsed_rules(rules):
     parsed_rules = rules.split('\n')
     for i in range(len(parsed_rules)):
         parsed_rules[i] = parsed_rules[i].split('|')
-    return parsed_rules
+    return parsed_rules[1:]
 
 
 def parsed_orders(orders):
@@ -1437,7 +1437,7 @@ def part2(ordres, first_path):
         new_ordres.append(ordre)
     return True, new_ordres, add
 
-def boucle(ordres):
+def boucle_part2(ordres):
     first_path = True
     continuer = True
     to_conserve = []
@@ -1451,4 +1451,15 @@ def boucle(ordres):
         count += int(i[len(i)//2])
     print(count)
 
-boucle(ordres)
+def part2_opti(regles):
+    placed_numbers= []
+    for couple in regles : # on parcours toutes les règles
+        if couple[0] in [sous_liste[0] for sous_liste in placed_numbers]: #pour une règle donnée, on regarde si le premier nombre est déjà placé
+            source_value = next((f for e, f in placed_numbers if e == couple[0]), None) #on regarde sa valeur associée
+            if couple[1] in [sous_liste[0] for sous_liste in placed_numbers]: #on regarde si le deuxième nombre est déjà placé
+                target_value = next((f for e, f in placed_numbers if e == couple[1]), None) #on regarde sa valeur associée
+                if target_value < source_value :
+                    pass 
+
+
+part2_opti(regles)
