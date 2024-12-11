@@ -34,10 +34,10 @@ def step1(number):
         new_list[number*2024] = 1
     return new_list
 
-def other_way():
-    list_of_number = {554735 :1, 45401:1, 8434:1, 0:1, 188:1, 7487525:1, 77:1, 7:1}
+def other_way(blinks):
+    list_of_number = {45401:1, 8434:1, 0:1, 188:1, 7487525:1, 77:1, 7:1}
     dictionnaire = {}
-    for i in range(75):
+    for i in range(blinks):
         new_list = {}
         for number in list_of_number.keys():
             if number not in dictionnaire.keys() :
@@ -51,8 +51,36 @@ def other_way():
     count = 0
     for key in list_of_number.keys():
         count += list_of_number[key]
-    print(count)
-
+    return len(dictionnaire.keys())
 t0 = time.time()
-other_way()
+y = []
+for blinks in range(100):
+    y.append(other_way(blinks))
 print("computation time : {} ms".format(int((time.time()-t0)*1000)))
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Liste des valeurs de x allant de 1 à 100
+x_values = list(range(1, 101))
+
+# Exemple de fonction : y = x^2
+def function(x):
+    return x ** 2
+
+
+# Tracer la courbe
+plt.figure(figsize=(10, 6))
+plt.plot(x_values, y, color="blue")
+
+# Ajouter des labels et un titre
+plt.xlabel("nb de blinks")
+plt.ylabel("nb de valeurs possible sur une pierre")
+plt.legend()
+
+# Afficher la grille
+plt.grid(True)
+
+# Afficher le graphique
+plt.show()
