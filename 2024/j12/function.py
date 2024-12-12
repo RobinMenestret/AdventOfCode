@@ -1,4 +1,4 @@
-text = open("2024/j12/demo.txt").read()
+text = open("2024/j12/input.txt").read()
 input=[[]]
 ligne = 0
 for i in range(len(text)):  
@@ -56,13 +56,18 @@ def p2():
         sides = 0
         barriere_done = []
         for barriere in zone[1]:
+            found = 0
             for direction in directions:
                 if ([barriere[0][0]+direction[0],barriere[0][1]+direction[1]], barriere[1]) in barriere_done :
-                    found = True
-                    sides += 1
-                    barriere_done.append(barriere)
-        count += sides*len(zone)     
-        print("le nombre de coté est {} pour le groupe des {}".format(sides, input[zone[0][0][0]][zone[0][0][1]]))
+                    found += 1 
+            if found == 0 :    
+                sides += 1
+                #print(barriere)
+            elif found == 2 :
+                sides -= 1
+            barriere_done.append(barriere)
+        count += sides*len(zone[0])     
+        print("le nombre de coté est {} x {} = {} pour le groupe des {}".format(len(zone[0]), sides, len(zone[0])*sides, input[zone[0][0][0]][zone[0][0][1]]))
     print(count)
 
 p2()
