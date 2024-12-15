@@ -9,8 +9,8 @@ def text_to_table(text):
             table[ligne].append(text[i])
     return table
 
-map = text_to_table(open("2024/j15/map-demo1.txt", 'r').read())
-moves = open ("2024/j15/moves-demo1.txt", 'r').read()
+map = text_to_table(open("2024/j15/map.txt", 'r').read())
+moves = open ("2024/j15/moves.txt", 'r').read()
 
 def find_init(map):
     for i in range(len(map)):
@@ -58,8 +58,8 @@ def part1():
             map[current_pos[0]][current_pos[1]] = '.'
             map[next_pos[0]][next_pos[1]] = '@'
             current_pos = next_pos
-        #print('\n'.join([''.join(x) for x in map]))
-        #a = input()
+        print('\n'.join([''.join(x) for x in map]))
+        a = input()
     count = 0
     for i in range(len(map)):
         for j in range(len(map[0])):
@@ -87,33 +87,35 @@ def new_map():
     #print('\n'.join([''.join(x) for x in new_map]))
     return new_map
 
-def move_bloc_bis(bloc, dir, map):
-    horiz = True if dir[0] == 0 else False
+def move_bloc_bis(couple, bloc, dir, map):
+    list_to_move = [bloc]
+    move = True
     next_bloc = [bloc[0]+dir[0], bloc[1]+dir[1]]
-    print(map[next_bloc[0]][next_bloc[1]])
-    if map[next_bloc[0]][next_bloc[1]] == '[':
-        if move_bloc_bis(next_bloc, dir, map) and (horiz or move_bloc_bis([next_bloc[0], next_bloc[1]+1], dir, map)):
-            map[next_bloc[0]][next_bloc[1]] = map[bloc[0]][bloc[1]]
-            map[bloc[0]][bloc[1]] = "."
-            return True
+    if map[bloc[0]][bloc[1]] == '[':
+        if not couple :
+            move, liste = move_bloc_bis(True, [bloc[0], bloc[1]+1], dir, map)
+            list_to_move.extend(liste)
+    else :
+        if not couple :
+            move, liste = move_bloc_bis(True, [bloc[0], bloc[1]-1], dir, map)
+            list_to_move.extend(liste)
+    if not move :
+        return False, []
+    
+    if map[next_bloc[0]][next_bloc[1]] in ['[', ']'] and next_bloc not in list_to_move:
+        move, liste = move_bloc_bis(False, next_bloc, dir, map)
+        list_to_move.extend(liste)
+        if move :
+            return True, list_to_move
         else :
-            return False
-    elif map[next_bloc[0]][next_bloc[1]] == ']':
-        if move_bloc_bis(next_bloc, dir, map) and (horiz or move_bloc_bis([next_bloc[0], next_bloc[1]-1], dir, map)):
-            if move_bloc_bis([bloc[0], bloc[1]-1], dir, map):
-                map[next_bloc[0]][next_bloc[1]] = map[bloc[0]][bloc[1]]
-                map[bloc[0]][bloc[1]] = "."
-                return True
-            else :
-                return False
-        else :
-            return False
+            return False, []
     elif map[next_bloc[0]][next_bloc[1]] == '#':
-        return False
+        return False, []
     elif map[next_bloc[0]][next_bloc[1]] == '.':
-        map[next_bloc[0]][next_bloc[1]] = map[bloc[0]][bloc[1]]
-        map[bloc[0]][bloc[1]] = "."
-        return True
+        list_to_move.append(bloc)
+        return True, list_to_move
+    else :
+        return True, list_to_move
      
 def part2():
     map = new_map()
@@ -121,10 +123,9 @@ def part2():
     print('\n'.join([''.join(x) for x in map]))
     
     for i in range(len(moves)):
-        map_m1 = list.copy(map)
         arrow = moves[i] 
-        arrow = input()
-        print(arrow)
+        #arrow = input()
+        #print(arrow)
         if arrow == "<":
             dir = [0, -1]
         elif arrow == ">":
@@ -135,36 +136,33 @@ def part2():
             dir = [1, 0]
         else :
             continue
-        horiz = True if dir[0] == 0 else False
         #input()
         next_pos = [current_pos[0]+dir[0], current_pos[1]+dir[1]]
         move = False
-        if horiz :
-            if map[next_pos[0]][next_pos[1]]== ".":
-                move = True
-            print(map[next_pos[0]][next_pos[1]]in ['[', ']'])
-            if map[next_pos[0]][next_pos[1]]in ['[', ']'] and move_bloc_bis(next_pos, dir, map):
-                move = True
-            elif map[next_pos[0]][next_pos[1]]== "#":
-                move = False
-            if move :
-                map[current_pos[0]][current_pos[1]] = '.'
-                map[next_pos[0]][next_pos[1]] = '@'
-                current_pos = next_pos
-        else :
-            if map[next_pos[0]][next_pos[1]]== ".":
-                move = True
-            elif map[next_pos[0]][next_pos[1]] == "[" and move_bloc_bis(next_pos , dir, map) and move_bloc_bis([next_pos[0], next_pos[1]+1], dir, map):
-                move = True
-            elif map[next_pos[0]][next_pos[1]] == "]" and move_bloc_bis(next_pos , dir, map) and move_bloc_bis([next_pos[0], next_pos[1]-1], dir, map):
-                move = True
-            elif map[next_pos[0]][next_pos[1]]== "#":
-                move = False
-            if move :
-                map[current_pos[0]][current_pos[1]] = '.'
-                map[next_pos[0]][next_pos[1]] = '@'
-                current_pos = next_pos
-        print('\n'.join([''.join(x) for x in map]))
+        if map[next_pos[0]][next_pos[1]]== ".":
+            move, list_to_move = True, []
+        elif map[next_pos[0]][next_pos[1]] == "[" :
+            move, list_to_move = move_bloc_bis(False, next_pos , dir, map)
+        elif map[next_pos[0]][next_pos[1]] == "]" :
+            move, list_to_move = move_bloc_bis(False, next_pos , dir, map)
+        elif map[next_pos[0]][next_pos[1]]== "#":
+            move, list_to_move = False, []
+        if move :
+            list_to_move.append(current_pos)
+            temp_map = []
+            for i in range(len(map)):
+                temp_map.append([])
+                for j in map[i]:
+                    temp_map[i].append(j) 
+            passed_elt = []
+            for elt in list_to_move : 
+                map[elt[0]][elt[1]] = '.'
+            for elt in list_to_move : 
+                if elt not in passed_elt :
+                    passed_elt.append(elt)
+                    map[elt[0]+dir[0]][elt[1]+dir[1]] = temp_map[elt[0]][elt[1]]
+            current_pos = next_pos
+        #print('\n'.join([''.join(x) for x in map]))
     count = 0
     for i in range(len(map)):
         for j in range(len(map[0])):
