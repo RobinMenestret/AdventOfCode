@@ -1,3 +1,23 @@
+import keyboard
+import time
+
+def manual():
+    time.sleep(0.1)
+    while True :
+        if keyboard.is_pressed('up'):
+            return "^"
+        elif keyboard.is_pressed('down'):
+            return "v"
+        elif keyboard.is_pressed('left'):
+            return "<"
+        elif keyboard.is_pressed('right'):
+            return ">"
+        elif keyboard.is_pressed('q'):
+            quit()
+            break
+
+
+
 def text_to_table(text):
     table=[[]]
     ligne = 0
@@ -116,7 +136,8 @@ def move_bloc_bis(couple, bloc, dir, map):
         return True, list_to_move
     else :
         return True, list_to_move
-     
+ 
+
 def part2():
     map = new_map()
     current_pos = find_init(map)
@@ -124,7 +145,8 @@ def part2():
     
     for i in range(len(moves)):
         arrow = moves[i] 
-        #arrow = input()
+        arrow = manual()
+        #time.sleep(50)
         #print(arrow)
         if arrow == "<":
             dir = [0, -1]
@@ -162,7 +184,7 @@ def part2():
                     passed_elt.append(elt)
                     map[elt[0]+dir[0]][elt[1]+dir[1]] = temp_map[elt[0]][elt[1]]
             current_pos = next_pos
-        #print('\n'.join([''.join(x) for x in map]))
+        print('\n'.join([''.join(x) for x in map]))
     count = 0
     for i in range(len(map)):
         for j in range(len(map[0])):
