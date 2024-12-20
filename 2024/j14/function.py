@@ -60,4 +60,4 @@ def p2():
                 print("seconds : {}".format(seconds))
                 return
 
-p1()
+p2()
