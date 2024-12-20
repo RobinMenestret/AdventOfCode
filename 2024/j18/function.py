@@ -1,11 +1,12 @@
 from astar.search import AStar
 
+
 def dn(corpus):
     return [[int(l[0]), int(l[1].rstrip())] for l in [l.split(",") for l in open('2024/j18/'+ corpus + '.txt', 'r').readlines()]], (7, 12) if corpus == "demo" else (71, 1024)
 
 
 def part1():
-    corpus = "input"
+    corpus = "demo"
     liste, (size, param) = dn(corpus)
     room = [[0] * size for _ in range(size)]
     begin = (0, 0)
@@ -14,7 +15,7 @@ def part1():
         room[bug[1]][bug[0]] = 1
     print(room)
     path = AStar(room).search(begin, end)
-    print(len(path))
+    print(path)
 
 def part2():
     corpus = "input"
@@ -32,4 +33,5 @@ def part2():
             print(liste[i-1+start])
             return
 
-part2()
+part1()
+
