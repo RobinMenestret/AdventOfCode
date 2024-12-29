@@ -1,9 +1,9 @@
-text = [line.split('\n') for line in open('2024/j24/input.txt', 'r').read().split('\n\n')]
+text = [line.split('\n') for line in open('2024/j24/input_cor.txt', 'r').read().split('\n\n')]
 begin = [(line[0], int(line[1])) for line in [op.split(': ') for op in [line for line in text[0]]]]
 ops = [(nb[0].split(' '), nb[1]) for nb in [op.split(' -> ') for op in [line for line in text[1]]]]
 
-print(begin)
-print(ops)
+# print(begin)
+# print(ops)
 
 def rec(input_1, input_2, op):
     out = [-1, -1]
@@ -47,7 +47,29 @@ def part1():
 
 
 def part2():
-    print(x)
-    print(y)
-    
+    print(part1())
+    print(x+y)
+    a=0
+
+
+part2()
 #list(filter(lambda line : line[0][0] == indice, begin))
+
+
+def adder(x, y):
+    x = ''.join(reversed(x))
+    y = ''.join(reversed(y))
+    z = ''
+    prev_r = 0
+    rn=0
+    for n in range(len(x)):
+        zn = (int(x[n]) ^ int(y[n])) ^ rn
+        rn = (int(x[n]) and int(y[n])) or ((int(x[n]) ^ int(y[n])) and prev_r)
+        z+=str(zn)
+        prev_r = rn
+    z+=str(rn)
+    print(''.join(reversed(z)))
+x = '01101'
+y = '11111'
+
+
