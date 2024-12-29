@@ -13,14 +13,47 @@ def code_to_move(code):
     for case in range(len(code)):
         y = pave[code[case]][0]-pave[prev][0]
         x = pave[code[case]][1]-pave[prev][1]
-        if y>0:
-            move += "v"*y
-        if x>0:
-            move += ">"*x
-        if y<0:
-            move += "^"*-y
-        if x<0:
-            move +="<"*-x
+        #print(prev)
+        if prev == "0" or prev == "A":
+            if code[case] in ["7", "4", "1"] :
+                if y<0:
+                    move += "^"*-y
+                if x>0:
+                    move += ">"*x
+                if x<0:
+                    move +="<"*-x
+            else :
+                if x>0:
+                    move += ">"*x
+                if x<0:
+                    move +="<"*-x
+                if y<0:
+                    move += "^"*-y
+        elif prev == "7" or prev == "4" or prev == "1" :
+            if code[case] == "A" or code[case] == "0" :
+                if y<0:
+                    move += "^"*-y
+                if x>0:
+                    move += ">"*x
+                if y>0:
+                    move += "v"*y
+            else :
+                if y<0:
+                    move += "^"*-y
+                if y>0:
+                    move += "v"*y
+                if x>0:
+                    move += ">"*x
+        else :
+            if y>0:
+                move += "v"*y
+            if x>0:
+                move += ">"*x
+            if x<0:
+                move +="<"*-x
+            if y<0:
+                move += "^"*-y
+
         move += 'A'
         prev = code[case]
 
@@ -45,33 +78,51 @@ def code_to_arrows(code):
 
         move += 'A'
         prev = code[case]
-    print(move)
+    #print(move)
     return move
 
-liste = open('2024/j21/demo.txt', 'r').read().split('\n')
-print(liste)
-count = 0
-for i in liste:
-    t1 = len(code_to_arrows(code_to_arrows(code_to_move(i))))
-    print(t1)
-    t2 = int(i[:3])
-    print(t2)
-    count += t1*t2
-print(count)
+def part1():
+    liste = open('2024/j21/input.txt', 'r').read().split('\n')
+    print(liste)
+    count = 0
+    for i in liste:
+        t1 = len(code_to_arrows(code_to_arrows(code_to_move(i))))
+        print(t1)
+        t2 = int(i[:3])
+        print(t2)
+        count += t1*t2
+    print(count)
 
-digit = [
-    ['7', '8', '9'],
-    ['4', '5', '6'],
-    ['1', '2', '3'],
-    ['X', '0', 'A']
-]
+def part2():
+    liste = open('2024/j21/input.txt', 'r').read().split('\n')
+    print(liste)
+    count = 0
+    for i in liste:
+        t1 = code_to_move(i)
+        for j in range(25):
+            print(len(t1))
+            t1 = code_to_arrows(t1)
+        t1 = len(t1)
+        print(t1)
+        t2 = int(i[:3])
+        print(t2)
+        count += t1*t2
+    print(count)
 
-fleches = [
-    ['X', '^', 'A'],
-    ['<', 'v', '>']
-]
-def manual_move():
-    positions = ((3, 2), (0, 2), (0, 2))
-    entree = input()
-    if entree == '^' :
-        positions[3]
+part2()
+# digit = [
+#     ['7', '8', '9'],
+#     ['4', '5', '6'],
+#     ['1', '2', '3'],
+#     ['X', '0', 'A']
+# ]
+
+# fleches = [
+#     ['X', '^', 'A'],
+#     ['<', 'v', '>']
+# ]
+# def manual_move():
+#     positions = ((3, 2), (0, 2), (0, 2))
+#     entree = input()
+#     if entree == '^' :
+#         positions[3]
